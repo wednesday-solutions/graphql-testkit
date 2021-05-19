@@ -1,0 +1,43 @@
+{
+  "name": "graphql-testkit",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "lib/graphql-testkit",
+  "scripts": {
+    "lint": "npm run lint:js",
+    "lint:eslint": "eslint --ignore-path .eslintignore",
+    "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix",
+    "lint:js": "npm run lint:eslint -- . ",
+    "lint:staged": "lint-staged",
+    "test:clean": "rimraf ./coverage",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "prettify": "prettier --write",
+    "webpack:prod": "webpack -p --mode=production",
+    "prepublishOnly": "yarn webpack:prod",
+    "local": "webpack -p --mode=development && node lib/graphql-toolkit &&  yarn prettier --write output/**/*.*"
+  },
+  "dependencies": {
+    "aws-cognito-cli": "^1.0.9",
+    "fs": "^0.0.1-security",
+    "get-graphql-schema": "^2.1.2",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-import": "^1.13.0",
+    "copy-webpack-plugin": "5.1.1",
+    "coveralls": "3.0.3",
+    "eslint": "5.16.0",
+    "jest-cli": "24.7.1",
+    "lint-staged": "8.1.5",
+    "prettier": "1.17.0",
+    "rimraf": "2.6.3",
+    "shelljs": "^0.8.4",
+    "terser-webpack-plugin": "^3.0.1",
+    "webpack": "4.30.0",
+    "webpack-cli": "^3.3.10"
+  }
+}
