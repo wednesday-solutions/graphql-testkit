@@ -26,7 +26,6 @@ shell.exec(`npx get-graphql-schema ${ENDPOINT} -j > schema.json`)
 const fileData = fs.readFileSync('schema.json', {encoding: 'utf-8'})
 const schema = JSON.parse(fileData)['__schema']
 
-const queries = schema.types.find(t => t.name === "Query").fields
 
 const recursivelyHandleOfType = (arg) => {
     if (arg.type.kind === "NON_NULL" ||
@@ -135,26 +134,29 @@ function createArgsAndBody(entity, entityObj, result, variables, root, depth, va
 
 }
 
-const operationName = "query"
+
 const endpoint = ENDPOINT.replace(/(http|https):\/\//, '')
 shell.exec(`rm -rf output/${endpoint}`);
 
 
-queries.forEach(e => {
-
-    const entity = recursivelyHandleOfType(e)
-    if (entity.type.kind !== "SCALAR" && entity.type.kind !== "ENUM" && entity.type.kind !== "UNION") {
-        const entityObj = schema.types.find(t => t.name === entity.type.name)
-        shell.exec(`mkdir -p output/${endpoint}/${entity.type.name}`);
-        let [result, variables, variablesJSON] = createArgsAndBody(entity, entityObj, "", "", true, 4);
-        result = `${operationName} ${result}`
-        result = result.replace('()',   `(${variables})`)
-        fs.writeFileSync(`output/${endpoint}/${entity.type.name}/${entity.type.name}.graphql`, result, {encoding: 'utf-8'})
-        fs.writeFileSync(`output/${endpoint}/${entity.type.name}/variables.json`, JSON.stringify(variablesJSON), {encoding: 'utf-8'})
-    }
-
-})
-
+const queries = schema.types.find(t => t.name === "Query").fields
+const mutations = schema.types.find(t => t.name === "Mutation").fields
+function generateOutput(list, operationName) {
+    list.forEach(e => {
+        const entity = recursivelyHandleOfType(e)
+        if (entity.type.kind !== "SCALAR" && entity.type.kind !== "ENUM" && entity.type.kind !== "UNION") {
+            const entityObj = schema.types.find(t => t.name === entity.type.name)
+            shell.exec(`mkdir -p output/${endpoint}/${operationName}/${entity.type.name}`);
+            let [result, variables, variablesJSON] = createArgsAndBody(entity, entityObj, "", "", true, 4);
+            result = `${operationName} ${result}`
+            result = result.replace('()', `(${variables})`)
+            fs.writeFileSync(`output/${endpoint}/${operationName}/${entity.type.name}/${entity.type.name}.graphql`, result, {encoding: 'utf-8'})
+            fs.writeFileSync(`output/${endpoint}/${operationName}/${entity.type.name}/variables.json`, JSON.stringify(variablesJSON), {encoding: 'utf-8'})
+        }
+    })
+}
+generateOutput(queries, "query")
+generateOutput(mutations, "mutation")
 
 
 

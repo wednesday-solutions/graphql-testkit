@@ -1,0 +1,19 @@
+{
+  "SaveMessageActivityId": null,
+  "SaveMessageActivityMessage": null,
+  "SaveMessageActivityRecipientId": null,
+  "SaveMessageActivityPrivate": null,
+  "SaveMessageActivityLocked": null,
+  "SaveMessageActivityAsMod": null,
+  "favouritesPage": null,
+  "animePage": null,
+  "animePerPage": null,
+  "mangaPage": null,
+  "mangaPerPage": null,
+  "charactersPage": null,
+  "charactersPerPage": null,
+  "staffPage": null,
+  "staffPerPage": null,
+  "studiosPage": null,
+  "studiosPerPage": null
+}

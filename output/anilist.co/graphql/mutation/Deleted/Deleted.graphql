@@ -1,0 +1,5 @@
+mutation Deletethreadcomment($DeleteThreadCommentId: Int) {
+  DeleteThreadComment(id: $DeleteThreadCommentId) {
+    deleted
+  }
+}

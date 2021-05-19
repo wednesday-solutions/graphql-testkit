@@ -1,0 +1,161 @@
+mutation Saveactivityreply(
+  $SaveActivityReplyId: Int
+  $SaveActivityReplyActivityId: Int
+  $SaveActivityReplyText: String
+  $SaveActivityReplyAsMod: Boolean
+) {
+  SaveActivityReply(
+    id: $SaveActivityReplyId
+    activityId: $SaveActivityReplyActivityId
+    text: $SaveActivityReplyText
+    asMod: $SaveActivityReplyAsMod
+  ) {
+    id
+    userId
+    activityId
+    text
+    likeCount
+    isLiked
+    createdAt
+    user {
+      id
+      name
+      about
+      avatar {
+        large
+        medium
+      }
+      bannerImage
+      isFollowing
+      isFollower
+      isBlocked
+      bans
+      options {
+        titleLanguage
+        displayAdultContent
+        airingNotifications
+        profileColor
+        notificationOptions {
+          type
+          enabled
+        }
+        timezone
+        activityMergeTime
+      }
+      mediaListOptions {
+        scoreFormat
+        rowOrder
+        animeList {
+          sectionOrder
+          splitCompletedSectionByFormat
+          customLists
+          advancedScoring
+          advancedScoringEnabled
+        }
+        mangaList {
+          sectionOrder
+          splitCompletedSectionByFormat
+          customLists
+          advancedScoring
+          advancedScoringEnabled
+        }
+      }
+      statistics {
+        anime {
+          count
+          meanScore
+          standardDeviation
+          minutesWatched
+          episodesWatched
+          chaptersRead
+          volumesRead
+        }
+        manga {
+          count
+          meanScore
+          standardDeviation
+          minutesWatched
+          episodesWatched
+          chaptersRead
+          volumesRead
+        }
+      }
+      unreadNotificationCount
+      siteUrl
+      donatorTier
+      donatorBadge
+      moderatorRoles
+      updatedAt
+    }
+    likes {
+      id
+      name
+      about
+      avatar {
+        large
+        medium
+      }
+      bannerImage
+      isFollowing
+      isFollower
+      isBlocked
+      bans
+      options {
+        titleLanguage
+        displayAdultContent
+        airingNotifications
+        profileColor
+        notificationOptions {
+          type
+          enabled
+        }
+        timezone
+        activityMergeTime
+      }
+      mediaListOptions {
+        scoreFormat
+        rowOrder
+        animeList {
+          sectionOrder
+          splitCompletedSectionByFormat
+          customLists
+          advancedScoring
+          advancedScoringEnabled
+        }
+        mangaList {
+          sectionOrder
+          splitCompletedSectionByFormat
+          customLists
+          advancedScoring
+          advancedScoringEnabled
+        }
+      }
+      statistics {
+        anime {
+          count
+          meanScore
+          standardDeviation
+          minutesWatched
+          episodesWatched
+          chaptersRead
+          volumesRead
+        }
+        manga {
+          count
+          meanScore
+          standardDeviation
+          minutesWatched
+          episodesWatched
+          chaptersRead
+          volumesRead
+        }
+      }
+      unreadNotificationCount
+      siteUrl
+      donatorTier
+      donatorBadge
+      moderatorRoles
+      updatedAt
+    }
+  }
+}
