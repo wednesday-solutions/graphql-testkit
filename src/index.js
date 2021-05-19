@@ -8,7 +8,7 @@ function ucfirst(str) {
     return firstLetter.toUpperCase() + str.substr(1);
 }
 
-const ENDPOINT = "https://api.spacex.land/graphql/"
+const ENDPOINT = "https://anilist.co/graphql"
 // shell.exec(`npx cognito-cli createConfig --region=ap-southeast-1 \
 //     --userPoolWebClientId=6uobj0e81bfc2hbo1rjked632r\
 //     --userPoolId=ap-southeast-1_URpT8rFMN\

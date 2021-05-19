@@ -1,0 +1,12 @@
+query Mediatagcollection($MediaTagCollectionStatus: Int) {
+  MediaTagCollection(status: $MediaTagCollectionStatus) {
+    id
+    name
+    description
+    category
+    rank
+    isGeneralSpoiler
+    isMediaSpoiler
+    isAdult
+  }
+}
