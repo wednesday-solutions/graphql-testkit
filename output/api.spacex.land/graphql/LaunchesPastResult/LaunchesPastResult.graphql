@@ -1,0 +1,115 @@
+query Launchespastresult(
+  $launchesPastResultFind: LaunchFind
+  $launchesPastResultLimit: Int
+  $launchesPastResultOffset: Int
+  $launchesPastResultOrder: String
+  $launchesPastResultSort: String
+) {
+  launchesPastResult(
+    find: $launchesPastResultFind
+    limit: $launchesPastResultLimit
+    offset: $launchesPastResultOffset
+    order: $launchesPastResultOrder
+    sort: $launchesPastResultSort
+  ) {
+    result {
+      totalCount
+    }
+    data {
+      details
+      id
+      is_tentative
+      launch_date_local
+      launch_date_unix
+      launch_date_utc
+      launch_site {
+        site_id
+        site_name_long
+        site_name
+      }
+      launch_success
+      launch_year
+      links {
+        article_link
+        flickr_images
+        mission_patch_small
+        mission_patch
+        presskit
+        reddit_campaign
+        reddit_launch
+        reddit_media
+        reddit_recovery
+        video_link
+        wikipedia
+      }
+      mission_id
+      mission_name
+      rocket {
+        fairings {
+          recovered
+          recovery_attempt
+          reused
+          ship
+        }
+        rocket_name
+        rocket_type
+        rocket {
+          active
+          boosters
+          company
+          cost_per_launch
+          country
+          description
+          first_flight
+          id
+          name
+          stages
+          success_rate_pct
+          type
+          wikipedia
+        }
+        second_stage {
+          block
+        }
+      }
+      static_fire_date_unix
+      static_fire_date_utc
+      telemetry {
+        flight_club
+      }
+      tentative_max_precision
+      upcoming
+      ships {
+        abs
+        active
+        attempted_landings
+        class
+        course_deg
+        home_port
+        id
+        image
+        imo
+        missions {
+          flight
+          name
+        }
+        mmsi
+        model
+        name
+        position {
+          latitude
+          longitude
+        }
+        roles
+        speed_kn
+        status
+        successful_landings
+        type
+        url
+        weight_kg
+        weight_lbs
+        year_built
+      }
+    }
+  }
+}

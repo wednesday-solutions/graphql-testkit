@@ -8,7 +8,7 @@ function ucfirst(str) {
     return firstLetter.toUpperCase() + str.substr(1);
 }
 
-const ENDPOINT = "https://anilist.co/graphql"
+const ENDPOINT = "https://api.spacex.land/graphql/"
 // shell.exec(`npx cognito-cli createConfig --region=ap-southeast-1 \
 //     --userPoolWebClientId=6uobj0e81bfc2hbo1rjked632r\
 //     --userPoolId=ap-southeast-1_URpT8rFMN\
@@ -67,11 +67,11 @@ function createArgsAndBody(entity, entityObj, result, variables, root, depth, va
     entity.args.forEach((arg, index) => {
         const stackArgs = stackDeepestArg(Object.assign({}, arg)).reverse();
         arg = stackArgs[0]
-        let name;
+        let name = arg.type.name;
         stackArgs.forEach(a => {
             const isList = a.type.kind === "LIST"
             const isNonNull = a.type.kind === "NON_NULL"
-            name = arg.type.name || a.type.name
+            name = name || a.type.name
             if (isNonNull) {
                 name = `${name}!`
             }
@@ -136,7 +136,8 @@ function createArgsAndBody(entity, entityObj, result, variables, root, depth, va
 }
 
 const operationName = "query"
-shell.exec(`rm -rf output`);
+const endpoint = ENDPOINT.replace(/(http|https):\/\//, '')
+shell.exec(`rm -rf output/${endpoint}`);
 
 
 queries.forEach(e => {
@@ -144,12 +145,12 @@ queries.forEach(e => {
     const entity = recursivelyHandleOfType(e)
     if (entity.type.kind !== "SCALAR" && entity.type.kind !== "ENUM" && entity.type.kind !== "UNION") {
         const entityObj = schema.types.find(t => t.name === entity.type.name)
-        shell.exec(`mkdir -p output/${entity.type.name}`);
+        shell.exec(`mkdir -p output/${endpoint}/${entity.type.name}`);
         let [result, variables, variablesJSON] = createArgsAndBody(entity, entityObj, "", "", true, 4);
         result = `${operationName} ${result}`
-        result = result.replace('()', `(${variables})`)
-        fs.writeFileSync(`output/${entity.type.name}/${entity.type.name}.graphql`, result, {encoding: 'utf-8'})
-        fs.writeFileSync(`output/${entity.type.name}/variables.json`, JSON.stringify(variablesJSON), {encoding: 'utf-8'})
+        result = result.replace('()',   `(${variables})`)
+        fs.writeFileSync(`output/${endpoint}/${entity.type.name}/${entity.type.name}.graphql`, result, {encoding: 'utf-8'})
+        fs.writeFileSync(`output/${endpoint}/${entity.type.name}/variables.json`, JSON.stringify(variablesJSON), {encoding: 'utf-8'})
     }
 
 })

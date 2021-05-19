@@ -1,0 +1,18 @@
+query Landpad($landpadId: ID!) {
+  landpad(id: $landpadId) {
+    attempted_landings
+    details
+    full_name
+    id
+    landing_type
+    location {
+      latitude
+      longitude
+      name
+      region
+    }
+    status
+    successful_landings
+    wikipedia
+  }
+}

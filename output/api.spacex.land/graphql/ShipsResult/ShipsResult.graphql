@@ -1,0 +1,50 @@
+query Shipsresult(
+  $shipsResultFind: ShipsFind
+  $shipsResultLimit: Int
+  $shipsResultOffset: Int
+  $shipsResultOrder: String
+  $shipsResultSort: String
+) {
+  shipsResult(
+    find: $shipsResultFind
+    limit: $shipsResultLimit
+    offset: $shipsResultOffset
+    order: $shipsResultOrder
+    sort: $shipsResultSort
+  ) {
+    result {
+      totalCount
+    }
+    data {
+      abs
+      active
+      attempted_landings
+      class
+      course_deg
+      home_port
+      id
+      image
+      imo
+      missions {
+        flight
+        name
+      }
+      mmsi
+      model
+      name
+      position {
+        latitude
+        longitude
+      }
+      roles
+      speed_kn
+      status
+      successful_landings
+      type
+      url
+      weight_kg
+      weight_lbs
+      year_built
+    }
+  }
+}
