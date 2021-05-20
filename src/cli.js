@@ -1,6 +1,6 @@
 import shell from "shelljs";
 import process from "process";
-import {generateOutput} from "./index";
+import { generateOutput } from "./index";
 
 const args = process.argv.slice(2);
 const commandLineArgs = args.toString().split(",");
@@ -12,7 +12,7 @@ if (!commandLineArgs[0]) {
 } else {
   const config = createConfig(
     {
-      maxDepth: 4
+      maxDepth: 4,
     },
     commandLineArgs
   );
@@ -37,6 +37,6 @@ export function createConfig(config, args) {
     }
     newConfig[key] = value;
   }
-  config = {...config, ...newConfig};
+  config = { ...config, ...newConfig };
   return config;
 }
