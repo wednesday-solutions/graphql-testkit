@@ -1,9 +1,10 @@
 import fs from 'fs'
 import {v4} from 'uuid'
-import {capitalize,cloneDeep} from 'lodash'
+import {capitalize, cloneDeep} from 'lodash'
 import baseCollection from './base-collection.json'
 import sampleFolder from './base-folder.json'
 import sampleRequest from './base-request.json'
+import prettier from 'prettier'
 
 
 const shell = require('shelljs');
@@ -115,7 +116,7 @@ function createArgsAndBody(entity, entityObj, result, variables, root, depth, va
     if (root) {
         result += '\n}'
     }
-    return [result, variables,variablesJSON]
+    return [result, variables, variablesJSON]
 
 
 }
@@ -151,12 +152,12 @@ collection.info = baseCollection.info;
 collection.info._postman_id = v4()
 collection.info.name = endpoint
 collection.item = []
+
 function generateOutput(list, operationName) {
     const folder = cloneDeep(sampleFolder)
     folder.name = operationName;
     folder.item = []
     folder.item.push(...list.map((e, i) => {
-        const sampleRequest = require('./base-request.json')
         let request = cloneDeep(sampleRequest)
         const entity = recursivelyHandleOfType(e)
         if (entity.type.kind !== "SCALAR" && entity.type.kind !== "ENUM" && entity.type.kind !== "UNION") {
@@ -165,8 +166,10 @@ function generateOutput(list, operationName) {
             let [result, variables, variablesJSON] = createArgsAndBody(entity, entityObj, "", "", true, 4);
             result = `${operationName} ${result}`
             result = result.replace('()', `(${variables})`)
+            result = prettier.format(result, {parser: "graphql"})
+            const v = prettier.format(JSON.stringify(variablesJSON), {parser: "json-stringify"})
             request.request.body.graphql.query = result.toString()
-            request.request.body.graphql.variables = JSON.stringify(variablesJSON)
+            request.request.body.graphql.variables = v
             request.request.url.raw = endpoint
             request.request.url.host = [endpoint]
             request.name = `${operationName} ${entity.name}`
@@ -177,13 +180,7 @@ function generateOutput(list, operationName) {
     }))
     return folder
 }
+
 collection.item.push(generateOutput(queries, "query"))
 collection.item.push(generateOutput(mutations, "mutation"))
-
-
-fs.writeFileSync(`output/collections.json`, JSON.stringify(collection), {encoding: 'utf-8'})
-
-
-
-
-
+fs.writeFileSync(`output/collections.json`, JSON.stringify(collection), {encoding: 'utf-8'});

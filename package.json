@@ -14,7 +14,7 @@
     "prettify": "prettier --write",
     "webpack:prod": "webpack -p --mode=production",
     "prepublishOnly": "yarn webpack:prod",
-    "local": "webpack -p --mode=development && node lib/graphql-toolkit &&  yarn prettier --write output/**/*.*"
+    "local": "webpack -p --mode=development && node lib/graphql-toolkit"
   },
   "dependencies": {
     "aws-cognito-cli": "^1.0.9",
