@@ -4,6 +4,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 module.exports = {
   target: "node",
+  devtool: 'source-map',
   node: false,
   entry: "./src/cli.js",
   output: {
