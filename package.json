@@ -1,8 +1,8 @@
 {
-  "name": "graphql-testkit",
+  "name": "graphql-toolkit",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "bin/graphql-testkit",
+  "main": "bin/graphql-toolkit",
   "scripts": {
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .eslintignore",
