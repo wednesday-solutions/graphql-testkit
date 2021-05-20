@@ -1,0 +1,83 @@
+query Rockets($rocketsLimit: Int, $rocketsOffset: Int) {
+  rockets(limit: $rocketsLimit, offset: $rocketsOffset) {
+    active
+    boosters
+    company
+    cost_per_launch
+    country
+    description
+    diameter {
+      feet
+      meters
+    }
+    engines {
+      number
+      type
+      version
+      layout
+      engine_loss_max
+      propellant_1
+      propellant_2
+      thrust_sea_level {
+        kN
+        lbf
+      }
+      thrust_vacuum {
+        kN
+        lbf
+      }
+      thrust_to_weight
+    }
+    first_flight
+    first_stage {
+      burn_time_sec
+      engines
+      fuel_amount_tons
+      reusable
+      thrust_sea_level {
+        kN
+        lbf
+      }
+      thrust_vacuum {
+        kN
+        lbf
+      }
+    }
+    height {
+      feet
+      meters
+    }
+    id
+    landing_legs {
+      number
+      material
+    }
+    mass {
+      kg
+      lb
+    }
+    name
+    payload_weights {
+      id
+      kg
+      lb
+      name
+    }
+    second_stage {
+      burn_time_sec
+      engines
+      fuel_amount_tons
+      payloads {
+        option_1
+      }
+      thrust {
+        kN
+        lbf
+      }
+    }
+    stages
+    success_rate_pct
+    type
+    wikipedia
+  }
+}

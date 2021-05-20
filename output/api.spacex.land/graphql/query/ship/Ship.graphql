@@ -1,0 +1,33 @@
+query Ship($shipId: ID!) {
+  ship(id: $shipId) {
+    abs
+    active
+    attempted_landings
+    class
+    course_deg
+    home_port
+    id
+    image
+    imo
+    missions {
+      flight
+      name
+    }
+    mmsi
+    model
+    name
+    position {
+      latitude
+      longitude
+    }
+    roles
+    speed_kn
+    status
+    successful_landings
+    type
+    url
+    weight_kg
+    weight_lbs
+    year_built
+  }
+}

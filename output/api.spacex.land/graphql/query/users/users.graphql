@@ -1,0 +1,21 @@
+query Users(
+  $usersDistinct_on: [users_select_column!]
+  $usersLimit: Int
+  $usersOffset: Int
+  $usersOrder_by: [users_order_by!]
+  $usersWhere: users_bool_exp
+) {
+  users(
+    distinct_on: $usersDistinct_on
+    limit: $usersLimit
+    offset: $usersOffset
+    order_by: $usersOrder_by
+    where: $usersWhere
+  ) {
+    id
+    name
+    rocket
+    timestamp
+    twitter
+  }
+}

@@ -183,4 +183,4 @@ function generateOutput(list, operationName) {
 
 collection.item.push(generateOutput(queries, "query"))
 collection.item.push(generateOutput(mutations, "mutation"))
-fs.writeFileSync(`output/collections.json`, JSON.stringify(collection), {encoding: 'utf-8'});
+fs.writeFileSync(`output/${endpoint}/collections.json`, JSON.stringify(collection), {encoding: 'utf-8'});

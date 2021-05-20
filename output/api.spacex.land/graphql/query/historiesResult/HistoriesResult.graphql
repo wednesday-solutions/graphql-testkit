@@ -1,0 +1,95 @@
+query Historiesresult(
+  $historiesResultFind: HistoryFind
+  $historiesResultLimit: Int
+  $historiesResultOffset: Int
+  $historiesResultOrder: String
+  $historiesResultSort: String
+) {
+  historiesResult(
+    find: $historiesResultFind
+    limit: $historiesResultLimit
+    offset: $historiesResultOffset
+    order: $historiesResultOrder
+    sort: $historiesResultSort
+  ) {
+    result {
+      totalCount
+    }
+    data {
+      details
+      event_date_unix
+      event_date_utc
+      id
+      links {
+        article
+        reddit
+        wikipedia
+      }
+      title
+      flight {
+        details
+        id
+        is_tentative
+        launch_date_local
+        launch_date_unix
+        launch_date_utc
+        launch_site {
+          site_id
+          site_name_long
+          site_name
+        }
+        launch_success
+        launch_year
+        links {
+          article_link
+          flickr_images
+          mission_patch_small
+          mission_patch
+          presskit
+          reddit_campaign
+          reddit_launch
+          reddit_media
+          reddit_recovery
+          video_link
+          wikipedia
+        }
+        mission_id
+        mission_name
+        rocket {
+          rocket_name
+          rocket_type
+        }
+        static_fire_date_unix
+        static_fire_date_utc
+        telemetry {
+          flight_club
+        }
+        tentative_max_precision
+        upcoming
+        ships {
+          abs
+          active
+          attempted_landings
+          class
+          course_deg
+          home_port
+          id
+          image
+          imo
+          mmsi
+          model
+          name
+          roles
+          speed_kn
+          status
+          successful_landings
+          type
+          url
+          weight_kg
+          weight_lbs
+          year_built
+        }
+      }
+    }
+  }
+}

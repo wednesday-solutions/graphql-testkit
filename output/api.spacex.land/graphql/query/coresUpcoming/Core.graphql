@@ -1,0 +1,30 @@
+query Coresupcoming(
+  $coresUpcomingFind: CoresFind
+  $coresUpcomingLimit: Int
+  $coresUpcomingOffset: Int
+  $coresUpcomingOrder: String
+  $coresUpcomingSort: String
+) {
+  coresUpcoming(
+    find: $coresUpcomingFind
+    limit: $coresUpcomingLimit
+    offset: $coresUpcomingOffset
+    order: $coresUpcomingOrder
+    sort: $coresUpcomingSort
+  ) {
+    asds_attempts
+    asds_landings
+    block
+    id
+    missions {
+      flight
+      name
+    }
+    original_launch
+    reuse_count
+    rtls_attempts
+    rtls_landings
+    status
+    water_landing
+  }
+}
