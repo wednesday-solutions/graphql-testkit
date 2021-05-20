@@ -20,7 +20,8 @@
     "aws-cognito-cli": "^1.0.9",
     "fs": "^0.0.1-security",
     "get-graphql-schema": "^2.1.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

@@ -1,0 +1,34 @@
+{
+  "name": "{{ requestName }}",
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "exec": [
+          "pm.test(\"errors is undefined\", function() {",
+          "    const response = JSON.parse(responseBody);",
+          "    pm.expect(response.errors).to.be.undefined",
+          "});"
+        ],
+        "type": "text/javascript"
+      }
+    }
+  ],
+  "request": {
+    "method": "POST",
+    "body": {
+      "mode": "graphql",
+      "graphql": {
+        "query": "{{ query }}",
+        "variables": "{{ variables }}"
+      }
+    },
+    "url": {
+      "raw": "{{ graphqlURL }}",
+      "host": [
+        "{{ graphqlURL }}"
+      ]
+    }
+  },
+  "response": []
+}

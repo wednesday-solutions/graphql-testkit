@@ -1,9 +1,0 @@
-query Users_by_pk($users_by_pkId: uuid!) {
-  users_by_pk(id: $users_by_pkId) {
-    id
-    name
-    rocket
-    timestamp
-    twitter
-  }
-}
