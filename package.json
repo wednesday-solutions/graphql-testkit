@@ -2,7 +2,7 @@
   "name": "graphql-testkit",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "lib/graphql-testkit",
+  "main": "bin/graphql-testkit",
   "scripts": {
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .eslintignore",
@@ -14,7 +14,7 @@
     "prettify": "prettier --write",
     "webpack:prod": "webpack -p --mode=production",
     "prepublishOnly": "yarn webpack:prod",
-    "local": "webpack -p --mode=development && node lib/graphql-toolkit"
+    "local": "webpack -p --mode=development && node bin/graphql-toolkit"
   },
   "dependencies": {
     "aws-cognito-cli": "^1.0.9",
@@ -22,6 +22,9 @@
     "get-graphql-schema": "^2.1.2",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2"
+  },
+  "bin": {
+    "graphql-toolkit": "bin/graphql-toolkit.js"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
