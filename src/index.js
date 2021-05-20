@@ -161,7 +161,7 @@ function generateOutput(list, operationName) {
         const entity = recursivelyHandleOfType(e)
         if (entity.type.kind !== "SCALAR" && entity.type.kind !== "ENUM" && entity.type.kind !== "UNION") {
             const entityObj = schema.types.find(t => t.name === entity.type.name)
-            shell.exec(`mkdir -p output/${endpoint}/${operationName}/${entity.type.name}`);
+            shell.exec(`mkdir -p output/${endpoint}/${operationName}/${entity.name}`);
             let [result, variables, variablesJSON] = createArgsAndBody(entity, entityObj, "", "", true, 4);
             result = `${operationName} ${result}`
             result = result.replace('()', `(${variables})`)
@@ -169,9 +169,9 @@ function generateOutput(list, operationName) {
             request.request.body.graphql.variables = JSON.stringify(variablesJSON)
             request.request.url.raw = endpoint
             request.request.url.host = [endpoint]
-            request.name = `${operationName} ${entity.type.name}`
-            fs.writeFileSync(`output/${endpoint}/${operationName}/${entity.type.name}/${entity.type.name}.graphql`, result, {encoding: 'utf-8'})
-            fs.writeFileSync(`output/${endpoint}/${operationName}/${entity.type.name}/variables.json`, JSON.stringify(variablesJSON), {encoding: 'utf-8'})
+            request.name = `${operationName} ${entity.name}`
+            fs.writeFileSync(`output/${endpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`, result, {encoding: 'utf-8'})
+            fs.writeFileSync(`output/${endpoint}/${operationName}/${entity.name}/variables.json`, JSON.stringify(variablesJSON), {encoding: 'utf-8'})
             return request
         }
     }))

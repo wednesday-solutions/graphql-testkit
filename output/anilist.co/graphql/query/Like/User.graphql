@@ -1,9 +1,6 @@
-query User(
-  $UserId: Int
-  $UserName: String
-  $UserIsModerator: Boolean
-  $UserSearch: String
-  $UserSort: [UserSort]
+query Like(
+  $LikeLikeableId: Int
+  $LikeType: LikeableType
   $favouritesPage: Int
   $animePage: Int
   $animePerPage: Int
@@ -64,13 +61,7 @@ query User(
   $studiosLimit: Int
   $studiosSort: [UserStatisticsSort]
 ) {
-  User(
-    id: $UserId
-    name: $UserName
-    isModerator: $UserIsModerator
-    search: $UserSearch
-    sort: $UserSort
-  ) {
+  Like(likeableId: $LikeLikeableId, type: $LikeType) {
     id
     name
     about

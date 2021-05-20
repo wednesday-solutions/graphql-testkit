@@ -1,9 +1,6 @@
 {
-  "UserId": null,
-  "UserName": null,
-  "UserIsModerator": null,
-  "UserSearch": null,
-  "UserSort": null,
+  "FollowerUserId": null,
+  "FollowerSort": null,
   "favouritesPage": null,
   "animePage": null,
   "animePerPage": null,

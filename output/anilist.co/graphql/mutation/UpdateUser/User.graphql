@@ -1,9 +1,17 @@
-query User(
-  $UserId: Int
-  $UserName: String
-  $UserIsModerator: Boolean
-  $UserSearch: String
-  $UserSort: [UserSort]
+mutation Updateuser(
+  $UpdateUserAbout: String
+  $UpdateUserTitleLanguage: UserTitleLanguage
+  $UpdateUserDisplayAdultContent: Boolean
+  $UpdateUserAiringNotifications: Boolean
+  $UpdateUserScoreFormat: ScoreFormat
+  $UpdateUserRowOrder: String
+  $UpdateUserProfileColor: String
+  $UpdateUserDonatorBadge: String
+  $UpdateUserNotificationOptions: [NotificationOptionInput]
+  $UpdateUserTimezone: String
+  $UpdateUserActivityMergeTime: Int
+  $UpdateUserAnimeListOptions: MediaListOptionsInput
+  $UpdateUserMangaListOptions: MediaListOptionsInput
   $favouritesPage: Int
   $animePage: Int
   $animePerPage: Int
@@ -64,12 +72,20 @@ query User(
   $studiosLimit: Int
   $studiosSort: [UserStatisticsSort]
 ) {
-  User(
-    id: $UserId
-    name: $UserName
-    isModerator: $UserIsModerator
-    search: $UserSearch
-    sort: $UserSort
+  UpdateUser(
+    about: $UpdateUserAbout
+    titleLanguage: $UpdateUserTitleLanguage
+    displayAdultContent: $UpdateUserDisplayAdultContent
+    airingNotifications: $UpdateUserAiringNotifications
+    scoreFormat: $UpdateUserScoreFormat
+    rowOrder: $UpdateUserRowOrder
+    profileColor: $UpdateUserProfileColor
+    donatorBadge: $UpdateUserDonatorBadge
+    notificationOptions: $UpdateUserNotificationOptions
+    timezone: $UpdateUserTimezone
+    activityMergeTime: $UpdateUserActivityMergeTime
+    animeListOptions: $UpdateUserAnimeListOptions
+    mangaListOptions: $UpdateUserMangaListOptions
   ) {
     id
     name

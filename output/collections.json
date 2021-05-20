@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "14dccf02-7228-40a0-9412-e143bb4198d7",
+    "_postman_id": "e4c0beb8-65df-4783-9323-69c88479009a",
     "name": "anilist.co/graphql",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -266,7 +266,7 @@
         },
         null,
         {
-          "name": "query MediaTag",
+          "name": "query MediaTagCollection",
           "event": [
             {
               "listen": "test",
@@ -330,7 +330,7 @@
           "response": []
         },
         {
-          "name": "query User",
+          "name": "query Viewer",
           "event": [
             {
               "listen": "test",
@@ -460,7 +460,7 @@
           "response": []
         },
         {
-          "name": "query User",
+          "name": "query Following",
           "event": [
             {
               "listen": "test",
@@ -492,7 +492,7 @@
           "response": []
         },
         {
-          "name": "query User",
+          "name": "query Follower",
           "event": [
             {
               "listen": "test",
@@ -620,7 +620,7 @@
           "response": []
         },
         {
-          "name": "query User",
+          "name": "query Like",
           "event": [
             {
               "listen": "test",
@@ -652,7 +652,7 @@
           "response": []
         },
         {
-          "name": "query ParsedMarkdown",
+          "name": "query Markdown",
           "event": [
             {
               "listen": "test",
@@ -753,7 +753,7 @@
       "name": "mutation",
       "item": [
         {
-          "name": "mutation User",
+          "name": "mutation UpdateUser",
           "event": [
             {
               "listen": "test",
@@ -785,7 +785,7 @@
           "response": []
         },
         {
-          "name": "mutation MediaList",
+          "name": "mutation SaveMediaListEntry",
           "event": [
             {
               "listen": "test",
@@ -817,7 +817,7 @@
           "response": []
         },
         {
-          "name": "mutation MediaList",
+          "name": "mutation UpdateMediaListEntries",
           "event": [
             {
               "listen": "test",
@@ -849,7 +849,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteMediaListEntry",
           "event": [
             {
               "listen": "test",
@@ -881,7 +881,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteCustomList",
           "event": [
             {
               "listen": "test",
@@ -913,7 +913,7 @@
           "response": []
         },
         {
-          "name": "mutation TextActivity",
+          "name": "mutation SaveTextActivity",
           "event": [
             {
               "listen": "test",
@@ -945,7 +945,7 @@
           "response": []
         },
         {
-          "name": "mutation MessageActivity",
+          "name": "mutation SaveMessageActivity",
           "event": [
             {
               "listen": "test",
@@ -977,7 +977,7 @@
           "response": []
         },
         {
-          "name": "mutation ListActivity",
+          "name": "mutation SaveListActivity",
           "event": [
             {
               "listen": "test",
@@ -1009,7 +1009,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteActivity",
           "event": [
             {
               "listen": "test",
@@ -1042,7 +1042,7 @@
         },
         null,
         {
-          "name": "mutation ActivityReply",
+          "name": "mutation SaveActivityReply",
           "event": [
             {
               "listen": "test",
@@ -1074,7 +1074,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteActivityReply",
           "event": [
             {
               "listen": "test",
@@ -1106,7 +1106,7 @@
           "response": []
         },
         {
-          "name": "mutation User",
+          "name": "mutation ToggleLike",
           "event": [
             {
               "listen": "test",
@@ -1139,7 +1139,7 @@
         },
         null,
         {
-          "name": "mutation User",
+          "name": "mutation ToggleFollow",
           "event": [
             {
               "listen": "test",
@@ -1171,7 +1171,7 @@
           "response": []
         },
         {
-          "name": "mutation Favourites",
+          "name": "mutation ToggleFavourite",
           "event": [
             {
               "listen": "test",
@@ -1203,7 +1203,7 @@
           "response": []
         },
         {
-          "name": "mutation Favourites",
+          "name": "mutation UpdateFavouriteOrder",
           "event": [
             {
               "listen": "test",
@@ -1235,7 +1235,7 @@
           "response": []
         },
         {
-          "name": "mutation Review",
+          "name": "mutation SaveReview",
           "event": [
             {
               "listen": "test",
@@ -1267,7 +1267,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteReview",
           "event": [
             {
               "listen": "test",
@@ -1299,7 +1299,7 @@
           "response": []
         },
         {
-          "name": "mutation Review",
+          "name": "mutation RateReview",
           "event": [
             {
               "listen": "test",
@@ -1331,7 +1331,7 @@
           "response": []
         },
         {
-          "name": "mutation Recommendation",
+          "name": "mutation SaveRecommendation",
           "event": [
             {
               "listen": "test",
@@ -1363,7 +1363,7 @@
           "response": []
         },
         {
-          "name": "mutation Thread",
+          "name": "mutation SaveThread",
           "event": [
             {
               "listen": "test",
@@ -1395,7 +1395,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteThread",
           "event": [
             {
               "listen": "test",
@@ -1427,7 +1427,7 @@
           "response": []
         },
         {
-          "name": "mutation Thread",
+          "name": "mutation ToggleThreadSubscription",
           "event": [
             {
               "listen": "test",
@@ -1459,7 +1459,7 @@
           "response": []
         },
         {
-          "name": "mutation ThreadComment",
+          "name": "mutation SaveThreadComment",
           "event": [
             {
               "listen": "test",
@@ -1491,7 +1491,7 @@
           "response": []
         },
         {
-          "name": "mutation Deleted",
+          "name": "mutation DeleteThreadComment",
           "event": [
             {
               "listen": "test",
