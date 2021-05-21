@@ -10,17 +10,17 @@ if (!commandLineArgs[0]) {
     `echo Sorry! graphql-testkit requires an argument to be passed. Run graphql-testkit --help for more details`
   );
 } else {
-  if (commandLineArgs[0] === '--help') {
+  if (commandLineArgs[0] === "--help") {
     shell.echo(
       "endpoint=GraphQL endpoint you want to create the postman collection for\n" +
-      "headers=Comma separated list of headers that you want to pass with the request to get the schema\n" +
-      "maxDepth=Maximum amount of nesting you want in the auto-generated queries and mutations\n" +
-
-      "")
+        "headers=Comma separated list of headers that you want to pass with the request to get the schema\n" +
+        "maxDepth=Maximum amount of nesting you want in the auto-generated queries and mutations\n" +
+        ""
+    );
   } else {
     const config = createConfig(
       {
-        maxDepth: 4,
+        maxDepth: 4
       },
       commandLineArgs
     );
