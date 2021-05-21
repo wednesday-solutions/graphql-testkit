@@ -25,13 +25,13 @@ graphql-testkit \
 ```
 
 - ### endpoint (Required)
-The GraphQL endpoint that you want to generate the postman collection for
+    The GraphQL endpoint that you want to generate the postman collection for
 
 - ### header (optional)
-Comma separated list of http headers that you need to send to you GraphQL API.
+    Comma separated list of http headers that you need to send to you GraphQL API.
 
 - ### maxDepth (optional)
-The maximum you want to nest the generated queries and mutations. Default value is 4
+    The maximum you want to nest the generated queries and mutations. Default value is 4
 
 ## Output
 An output directory is created in the current working directory.  
