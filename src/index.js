@@ -15,7 +15,7 @@ function ucfirst(str) {
   return firstLetter.toUpperCase() + str.substr(1);
 }
 
-const recursivelyHandleOfType = (arg) => {
+const recursivelyHandleOfType = arg => {
   if (arg.type.kind === "NON_NULL" || arg.type.kind === "LIST") {
     arg.type = arg.type.ofType;
     arg = recursivelyHandleOfType(arg);
@@ -73,7 +73,7 @@ function createArgsAndBody(
     const stackArgs = stackDeepestArg(Object.assign({}, arg)).reverse();
     arg = stackArgs[0];
     let name = arg.type.name;
-    stackArgs.forEach((a) => {
+    stackArgs.forEach(a => {
       const isList = a.type.kind === "LIST";
       const isNonNull = a.type.kind === "NON_NULL";
       name = name || a.type.name;
@@ -86,13 +86,11 @@ function createArgsAndBody(
       }
     });
     // concatenate all variables in a separate variable so that they can all be added after complete processing.
-    variables += `${index ? ", " : ""}$${
-      entity.name + ucfirst(arg.name)
-    }:${name}`;
+    variables += `${index ? ", " : ""}$${entity.name +
+      ucfirst(arg.name)}:${name}`;
     variablesJSON[`${entity.name + ucfirst(arg.name)}`] = null;
-    result += `${index ? ", " : ""}${arg.name}:$${
-      entity.name + ucfirst(arg.name)
-    }`;
+    result += `${index ? ", " : ""}${arg.name}:$${entity.name +
+      ucfirst(arg.name)}`;
   });
 
   // if there are arguments we must have a closing parenthesis
@@ -103,13 +101,13 @@ function createArgsAndBody(
   // since its not ENUM/UNION/SCALAR it must have fields
   result += "{";
   const tempResult = result;
-  (entityObj?.fields || []).forEach((field) => {
+  (entityObj?.fields || []).forEach(field => {
     if (field.isDeprecated) {
       return;
     }
     field = recursivelyHandleOfType(field);
     if (!INVALID_TYPES.includes(field.type.kind)) {
-      const obj = schema.types.find((t) => t.name === field.type.name);
+      const obj = schema.types.find(t => t.name === field.type.name);
       if (obj) {
         [result, variables] = createArgsAndBody(
           schema,
@@ -147,15 +145,17 @@ function generateOperationOutput(schema, list, operationName, config) {
   const folder = cloneDeep(sampleFolder);
   folder.name = operationName;
   folder.item = [];
-  list.forEach((e) => {
+  list.forEach(e => {
     // create a new request for each query/mutation/subscription
     let request = cloneDeep(sampleRequest);
     //
     const entity = recursivelyHandleOfType(e);
     if (!INVALID_TYPES.includes(entity.type.kind)) {
-      const entityObj = schema.types.find((t) => t.name === entity.type.name);
+      const entityObj = schema.types.find(t => t.name === entity.type.name);
       shell.exec(
-        `mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`
+        `mkdir -p output/${config.strippedEndpoint}/${operationName}/${
+          entity.name
+        }`
       );
       let [result, variables, variablesJSON] = createArgsAndBody(
         schema,
@@ -170,7 +170,7 @@ function generateOperationOutput(schema, list, operationName, config) {
       result = result.replace("()", `(${variables})`);
       result = prettier.format(result, { parser: "graphql" });
       const v = prettier.format(JSON.stringify(variablesJSON), {
-        parser: "json-stringify",
+        parser: "json-stringify"
       });
       request.request.body.graphql.query = result;
       request.request.body.graphql.variables = v;
@@ -178,12 +178,16 @@ function generateOperationOutput(schema, list, operationName, config) {
       request.request.url.host = [config.endpoint];
       request.name = `${operationName} ${entity.name}`;
       fs.writeFileSync(
-        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
+        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${
+          entity.type.name
+        }.graphql`,
         result,
         { encoding: "utf-8" }
       );
       fs.writeFileSync(
-        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
+        `output/${config.strippedEndpoint}/${operationName}/${
+          entity.name
+        }/variables.json`,
         JSON.stringify(variablesJSON),
         { encoding: "utf-8" }
       );
@@ -193,7 +197,7 @@ function generateOperationOutput(schema, list, operationName, config) {
   return folder;
 }
 
-export const generateOutput = (config) => {
+export const generateOutput = config => {
   config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, "");
 
   // create collection
@@ -208,7 +212,7 @@ export const generateOutput = (config) => {
   let headerCli = "";
   // add headers if any
   if (config.header) {
-    config.header.split(",").forEach((h) => {
+    config.header.split(",").forEach(h => {
       const [key, value] = h.split(":");
       headerCli += ` -h ${key}=${value}`;
     });
@@ -228,9 +232,9 @@ export const generateOutput = (config) => {
   shell.exec(`rm -rf output/${config.strippedEndpoint}`);
 
   // get all queries
-  const queries = schema.types.find((t) => t.name === "Query").fields;
+  const queries = schema.types.find(t => t.name === "Query").fields;
   // get all mutations
-  const mutations = schema.types.find((t) => t.name === "Mutation").fields;
+  const mutations = schema.types.find(t => t.name === "Mutation").fields;
 
   // generate requests for all queries
   collection.item.push(
