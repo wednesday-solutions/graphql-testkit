@@ -47,9 +47,6 @@ endpoint=https://api.spacex.land/graphql
 output/api.spacex.land/graphql/collections.json
 ```
 
-
-The postman collection is created in the output directory of the current working
-
 ## License
 
 [MIT](LICENSE)
