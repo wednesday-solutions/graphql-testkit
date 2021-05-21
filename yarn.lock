@@ -5386,16 +5386,6 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.2.2
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-"graphql-testkit@file:./graphql-testkit-v1.0.0.tgz":
-  version "1.0.0"
-  resolved "file:./graphql-testkit-v1.0.0.tgz#8869fbff2193b1a8b37c5bf5b1d762444b58906e"
-  dependencies:
-    aws-cognito-cli "^1.0.9"
-    fs "^0.0.1-security"
-    get-graphql-schema "^2.1.2"
-    lodash "^4.17.21"
-    uuid "^8.3.2"
-
 graphql@14.0.0:
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.0.0.tgz#4ee771c5266d08cb75df2d3ac41e8dd51ce3d599"
