@@ -52,8 +52,9 @@ module.exports = {
       { from: "./node_modules/shelljs/src/exec-child.js", to: "" }
     ]),
     new webpack.EnvironmentPlugin({
-      NODE_ENV: "development"
-    })
+      NODE_ENV: "production"
+    }),
+    new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true })
   ],
   resolve: {
     modules: ["node_modules", "app"],

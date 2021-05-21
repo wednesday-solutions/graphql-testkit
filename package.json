@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore",
-    "lint:eslint:fix": "eslint --ignore-path .gitignore --fix",
+    "lint:eslint:fix": "eslint --ignore-path .gitignore --fix src/*.js",
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged",
     "test:clean": "rimraf ./coverage",
@@ -27,7 +27,7 @@
     "graphql-testkit": "bin/graphql-testkit.js"
   },
   "lint-staged": {
-    "*.js": [
+    "src/*.js": [
       "npm run lint:eslint:fix",
       "git add --force"
     ],

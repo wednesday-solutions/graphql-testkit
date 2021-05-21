@@ -1,4 +1,3 @@
-#! /usr/bin/env node
 import shell from 'shelljs';
 import process from 'process';
 import { generateOutput } from './index';
