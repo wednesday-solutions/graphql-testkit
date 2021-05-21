@@ -188,8 +188,10 @@ export const generateOutput = config => {
     });
   }
   // get graphql schema
+  console.log(`Fetching schema from ${config.endpoint}`);
   shell.exec(`npx get-graphql-schema ${config.endpoint} ${headerCli} -j > schema.json`);
 
+  console.log(`Generating Postman collection`);
   // read the schema.json
   const fileData = fs.readFileSync('schema.json', { encoding: 'utf-8' });
 
@@ -213,4 +215,5 @@ export const generateOutput = config => {
   fs.writeFileSync(`output/${config.strippedEndpoint}/collections.json`, JSON.stringify(collection), {
     encoding: 'utf-8'
   });
+  console.log(`Output written to: ${process.cwd()}/output/${config.strippedEndpoint}`);
 };

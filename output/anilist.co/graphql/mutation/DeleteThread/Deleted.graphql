@@ -1,5 +1,0 @@
-mutation Deletethread($DeleteThreadId: Int) {
-  DeleteThread(id: $DeleteThreadId) {
-    deleted
-  }
-}
