@@ -5,6 +5,7 @@ import baseCollection from './base-collection.json';
 import sampleFolder from './base-folder.json';
 import sampleRequest from './base-request.json';
 import prettier from 'prettier';
+import Ora from 'ora';
 
 const shell = require('shelljs');
 
@@ -33,7 +34,7 @@ const stackDeepestArg = (arg, arr = []) => {
   return arr;
 };
 
-function createArgsAndBody(schema, entity, entityObj, result, variables, root, depth, variablesJSON = {}) {
+async function createArgsAndBody(schema, entity, entityObj, result, variables, root, depth, variablesJSON = {}) {
   // if there are no fields inside if it due to depth limits we do not add it to the result, so hold the last values
   const originalResult = result;
   const originalVariables = variables;
@@ -90,20 +91,31 @@ function createArgsAndBody(schema, entity, entityObj, result, variables, root, d
   // since its not ENUM/UNION/SCALAR it must have fields
   result += '{';
   const tempResult = result;
-  (entityObj?.fields || []).forEach(field => {
-    if (field.isDeprecated) {
-      return;
-    }
-    field = recursivelyHandleOfType(field);
-    if (!INVALID_TYPES.includes(field.type.kind)) {
-      const obj = schema.types.find(t => t.name === field.type.name);
-      if (obj) {
-        [result, variables] = createArgsAndBody(schema, field, obj, result, variables, false, depth - 1, variablesJSON);
+  await Promise.all(
+    (entityObj?.fields || []).map(async field => {
+      if (field.isDeprecated) {
+        return;
       }
-    } else {
-      result += `\n\t\t${field.name}`;
-    }
-  });
+      field = recursivelyHandleOfType(field);
+      if (!INVALID_TYPES.includes(field.type.kind)) {
+        const obj = schema.types.find(t => t.name === field.type.name);
+        if (obj) {
+          [result, variables] = await createArgsAndBody(
+            schema,
+            field,
+            obj,
+            result,
+            variables,
+            false,
+            depth - 1,
+            variablesJSON
+          );
+        }
+      } else {
+        result += `\n\t\t${field.name}`;
+      }
+    })
+  );
   // if the tempResult is the same as the result it means that no fields were added
   // so revert to original - this will remove all the arguments and variables
   // that we added since they are no longer needed
@@ -120,56 +132,68 @@ function createArgsAndBody(schema, entity, entityObj, result, variables, root, d
   return [result, variables, variablesJSON];
 }
 
-function generateOperationOutput(schema, list, operationName, config) {
+async function generateOperationOutput(schema, list, operationName, config) {
   // create a new folder for queries/mutations/subscriptions
   const folder = cloneDeep(sampleFolder);
   folder.name = operationName;
   folder.item = [];
-  list.forEach(e => {
-    // create a new request for each query/mutation/subscription
-    const request = cloneDeep(sampleRequest);
-    //
-    const entity = recursivelyHandleOfType(e);
-    if (!INVALID_TYPES.includes(entity.type.kind)) {
-      const entityObj = schema.types.find(t => t.name === entity.type.name);
-      shell.exec(`mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`);
-      let [result, variables, variablesJSON] = createArgsAndBody(
-        schema,
-        entity,
-        entityObj,
-        '',
-        '',
-        true,
-        config.maxDepth
-      );
-      result = `${operationName} ${result}`;
-      result = result.replace('()', `(${variables})`);
-      result = prettier.format(result, { parser: 'graphql' });
-      const v = prettier.format(JSON.stringify(variablesJSON), {
-        parser: 'json-stringify'
-      });
-      request.request.body.graphql.query = result;
-      request.request.body.graphql.variables = v;
-      request.request.url.raw = config.endpoint;
-      request.request.url.host = [config.endpoint];
-      request.name = `${operationName} ${entity.name}`;
-      fs.writeFileSync(
-        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
-        result,
-        { encoding: 'utf-8' }
-      );
-      fs.writeFileSync(
-        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
-        JSON.stringify(variablesJSON),
-        { encoding: 'utf-8' }
-      );
-      folder.item.push(request);
-    }
-  });
+  await Promise.all(
+    list.map(async e => {
+      // create a new request for each query/mutation/subscription
+      const request = cloneDeep(sampleRequest);
+      const entity = recursivelyHandleOfType(e);
+      if (!INVALID_TYPES.includes(entity.type.kind)) {
+        const entityObj = schema.types.find(t => t.name === entity.type.name);
+        shell.exec(`mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`);
+        let [result, variables, variablesJSON] = await createArgsAndBody(
+          schema,
+          entity,
+          entityObj,
+          '',
+          '',
+          true,
+          config.maxDepth
+        );
+        result = `${operationName} ${result}`;
+        result = result.replace('()', `(${variables})`);
+        result = prettier.format(result, { parser: 'graphql' });
+        const v = prettier.format(JSON.stringify(variablesJSON), {
+          parser: 'json-stringify'
+        });
+        request.request.body.graphql.query = result;
+        request.request.body.graphql.variables = v;
+        request.request.url.raw = config.endpoint;
+        request.request.url.host = [config.endpoint];
+        request.name = `${operationName} ${entity.name}`;
+        await new Promise(resolve => {
+          fs.writeFile(
+            `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
+            result,
+
+            { encoding: 'utf-8' },
+            () => {
+              resolve();
+            }
+          );
+        });
+        await new Promise(resolve => {
+          fs.writeFile(
+            `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
+            JSON.stringify(variablesJSON),
+            { encoding: 'utf-8' },
+            () => {
+              resolve();
+            }
+          );
+        });
+        folder.item.push(request);
+      }
+    })
+  );
   return folder;
 }
 
-export const generateOutput = config => {
+export const generateOutput = async config => {
   config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, '');
 
   // create collection
@@ -188,32 +212,62 @@ export const generateOutput = config => {
     });
   }
   // get graphql schema
-  console.log(`Fetching schema from ${config.endpoint}`);
-  shell.exec(`npx get-graphql-schema ${config.endpoint} ${headerCli} -j > schema.json`);
+  const spinner = new Ora(`Fetching schema from ${config.endpoint}`);
+  spinner.start();
+  await new Promise(resolve => {
+    shell.exec(`npx get-graphql-schema ${config.endpoint} ${headerCli} -j > schema.json`, { async: true }, () => {
+      spinner.succeed(`Schema fetched from ${config.endpoint}`);
+      resolve();
+    });
+  });
+  spinner.stop();
+  spinner.text = 'Generating Postman collection';
 
-  console.log(`Generating Postman collection`);
+  spinner.start();
   // read the schema.json
-  const fileData = fs.readFileSync('schema.json', { encoding: 'utf-8' });
-
+  const fileData = await new Promise(resolve =>
+    fs.readFile('schema.json', { encoding: 'utf-8' }, (_, fileData) => resolve(fileData))
+  );
   // parse the schema
   const schema = JSON.parse(fileData).__schema;
 
   // delete old output if any
-  shell.exec(`rm -rf output/${config.strippedEndpoint}`);
+  await new Promise(resolve =>
+    shell.exec(`rm -rf output/${config.strippedEndpoint}`, { async: true }, () => resolve())
+  );
 
   // get all queries
   const queries = schema.types.find(t => t.name === 'Query').fields;
   // get all mutations
   const mutations = schema.types.find(t => t.name === 'Mutation').fields;
 
-  // generate requests for all queries
-  collection.item.push(generateOperationOutput(schema, queries, 'query', config));
-  // generate requests for all mutations
-  collection.item.push(generateOperationOutput(schema, mutations, 'mutation', config));
-
+  const createCollection = async () => {
+    await new Promise(resolve => {
+      generateOperationOutput(schema, queries, 'query', config)
+        .then(o => {
+          collection.item.push(o);
+        })
+        .then(() => generateOperationOutput(schema, mutations, 'mutation', config))
+        .then(o => {
+          collection.item.push(o);
+          resolve();
+        });
+    });
+  };
+  await createCollection();
   // write the newly created collection to the output folder
-  fs.writeFileSync(`output/${config.strippedEndpoint}/collections.json`, JSON.stringify(collection), {
-    encoding: 'utf-8'
-  });
-  console.log(`Output written to: ${process.cwd()}/output/${config.strippedEndpoint}`);
+  await new Promise(resolve =>
+    fs.writeFile(
+      `output/${config.strippedEndpoint}/collections.json`,
+      JSON.stringify(collection),
+      {
+        encoding: 'utf-8'
+      },
+      () => {
+        resolve();
+      }
+    )
+  );
+  spinner.succeed('Postman collection generated');
+  spinner.succeed(`Output written to: ${process.cwd()}/output/${config.strippedEndpoint}`);
 };

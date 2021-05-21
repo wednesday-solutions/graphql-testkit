@@ -8,7 +8,13 @@ module.exports = {
     ],
     "@babel/preset-react"
   ],
-  plugins: ["@babel/plugin-syntax-dynamic-import"],
+  plugins: [
+    ["@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ],
+    "@babel/plugin-syntax-dynamic-import"],
   env: {
     production: {
       only: ["app"],
