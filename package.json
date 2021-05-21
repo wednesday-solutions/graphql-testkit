@@ -5,8 +5,8 @@
   "main": "bin/graphql-testkit",
   "scripts": {
     "lint": "npm run lint:js",
-    "lint:eslint": "eslint --ignore-path .eslintignore",
-    "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix",
+    "lint:eslint": "eslint --ignore-path .gitignore",
+    "lint:eslint:fix": "eslint --ignore-path .gitignore --fix",
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged",
     "test:clean": "rimraf ./coverage",
@@ -27,12 +27,36 @@
   "bin": {
     "graphql-testkit": "bin/graphql-testkit.js"
   },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint:eslint:fix",
+      "git add --force"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add --force"
+    ]
+  },
+  "pre-commit": "lint:staged",
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
     "babel-loader": "^8.1.0",
     "babel-plugin-import": "^1.13.0",
+    "eslint": "5.16.0",
+    "eslint-config-prettier": "4.1.0",
+    "eslint-config-prettier-standard": "^3.0.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-import-resolver-webpack": "0.11.1",
+    "eslint-plugin-import": "2.17.2",
+    "eslint-plugin-jsx-a11y": "6.2.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "3.0.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier-config-standard": "^1.0.1",
+    "pre-commit": "1.2.2",
     "copy-webpack-plugin": "5.1.1",
     "coveralls": "3.0.3",
     "eslint": "5.16.0",
