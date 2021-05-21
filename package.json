@@ -20,6 +20,7 @@
     "aws-cognito-cli": "^1.0.9",
     "fs": "^0.0.1-security",
     "get-graphql-schema": "^2.1.2",
+    "graphql-testkit": "file:./graphql-testkit-v1.0.0.tgz",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2"
   },
