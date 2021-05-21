@@ -7,7 +7,7 @@ const commandLineArgs = args.toString().split(",");
 
 if (!commandLineArgs[0]) {
   shell.exec(
-    `echo Sorry! graphql-toolkit requires an argument to be passed. Run graphql-toolkit --help for more details`
+    `echo Sorry! graphql-testkit requires an argument to be passed. Run graphql-testkit --help for more details`
   );
 } else {
   if (commandLineArgs[0] === '--help') {
@@ -26,7 +26,7 @@ if (!commandLineArgs[0]) {
     );
     if (!config.endpoint) {
       shell.echo(
-        `Sorry! graphql-toolkit requires an endpoint to be passed. Run graphql-toolkit --help for more details`
+        `Sorry! graphql-testkit requires an endpoint to be passed. Run graphql-testkit --help for more details`
       );
     } else {
       generateOutput(config);

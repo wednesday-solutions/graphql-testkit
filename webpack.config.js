@@ -10,8 +10,8 @@ module.exports = {
   output: {
     globalObject: "this",
     path: path.resolve(__dirname, "bin"),
-    filename: "graphql-toolkit.js",
-    library: "graphql-toolkit",
+    filename: "graphql-testkit.js",
+    library: "graphql-testkit",
     libraryTarget: "umd"
   },
   module: {
