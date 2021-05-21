@@ -161,6 +161,16 @@ async function generateOperationOutput(schema, list, operationName, config) {
           parser: 'json-stringify'
         });
         request.request.body.graphql.query = result;
+
+        request.request.header = config.header.split(',').map(header => {
+          const [key, value] = header.split(':');
+          return {
+            key,
+            value,
+            type: 'text',
+            disabled: false
+          };
+        });
         request.request.body.graphql.variables = v;
         request.request.url.raw = config.endpoint;
         request.request.url.host = [config.endpoint];

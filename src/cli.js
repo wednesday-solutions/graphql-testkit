@@ -2,8 +2,7 @@ import shell from 'shelljs';
 import process from 'process';
 import { generateOutput } from './index';
 
-const args = process.argv.slice(2);
-const commandLineArgs = args.toString().split(',');
+const commandLineArgs = process.argv.slice(2);
 
 if (!commandLineArgs[0]) {
   shell.exec(
