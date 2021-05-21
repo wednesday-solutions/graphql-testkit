@@ -1,14 +1,14 @@
-import fs from "fs";
-import { v4 } from "uuid";
-import { capitalize, cloneDeep } from "lodash";
-import baseCollection from "./base-collection.json";
-import sampleFolder from "./base-folder.json";
-import sampleRequest from "./base-request.json";
-import prettier from "prettier";
+import fs from 'fs';
+import { v4 } from 'uuid';
+import { capitalize, cloneDeep } from 'lodash';
+import baseCollection from './base-collection.json';
+import sampleFolder from './base-folder.json';
+import sampleRequest from './base-request.json';
+import prettier from 'prettier';
 
-const shell = require("shelljs");
+const shell = require('shelljs');
 
-const INVALID_TYPES = ["SCALAR", "ENUM", "UNION"];
+const INVALID_TYPES = ['SCALAR', 'ENUM', 'UNION'];
 
 function ucfirst(str) {
   var firstLetter = str.substr(0, 1);
@@ -16,7 +16,7 @@ function ucfirst(str) {
 }
 
 const recursivelyHandleOfType = arg => {
-  if (arg.type.kind === "NON_NULL" || arg.type.kind === "LIST") {
+  if (arg.type.kind === 'NON_NULL' || arg.type.kind === 'LIST') {
     arg.type = arg.type.ofType;
     arg = recursivelyHandleOfType(arg);
   }
@@ -25,7 +25,7 @@ const recursivelyHandleOfType = arg => {
 
 const stackDeepestArg = (arg, arr = []) => {
   arr.push(arg);
-  if (arg.type.kind === "NON_NULL" || arg.type.kind === "LIST") {
+  if (arg.type.kind === 'NON_NULL' || arg.type.kind === 'LIST') {
     const arg1 = Object.assign({}, arg);
     arg1.type = arg1.type.ofType;
     arr = stackDeepestArg(arg1, arr);
@@ -33,16 +33,7 @@ const stackDeepestArg = (arg, arr = []) => {
   return arr;
 };
 
-function createArgsAndBody(
-  schema,
-  entity,
-  entityObj,
-  result,
-  variables,
-  root,
-  depth,
-  variablesJSON = {}
-) {
+function createArgsAndBody(schema, entity, entityObj, result, variables, root, depth, variablesJSON = {}) {
   // if there are no fields inside if it due to depth limits we do not add it to the result, so hold the last values
   const originalResult = result;
   const originalVariables = variables;
@@ -74,8 +65,8 @@ function createArgsAndBody(
     arg = stackArgs[0];
     let name = arg.type.name;
     stackArgs.forEach(a => {
-      const isList = a.type.kind === "LIST";
-      const isNonNull = a.type.kind === "NON_NULL";
+      const isList = a.type.kind === 'LIST';
+      const isNonNull = a.type.kind === 'NON_NULL';
       name = name || a.type.name;
       // handle for null and list
       if (isNonNull) {
@@ -86,11 +77,9 @@ function createArgsAndBody(
       }
     });
     // concatenate all variables in a separate variable so that they can all be added after complete processing.
-    variables += `${index ? ", " : ""}$${entity.name +
-      ucfirst(arg.name)}:${name}`;
+    variables += `${index ? ', ' : ''}$${entity.name + ucfirst(arg.name)}:${name}`;
     variablesJSON[`${entity.name + ucfirst(arg.name)}`] = null;
-    result += `${index ? ", " : ""}${arg.name}:$${entity.name +
-      ucfirst(arg.name)}`;
+    result += `${index ? ', ' : ''}${arg.name}:$${entity.name + ucfirst(arg.name)}`;
   });
 
   // if there are arguments we must have a closing parenthesis
@@ -99,7 +88,7 @@ function createArgsAndBody(
   }
 
   // since its not ENUM/UNION/SCALAR it must have fields
-  result += "{";
+  result += '{';
   const tempResult = result;
   (entityObj?.fields || []).forEach(field => {
     if (field.isDeprecated) {
@@ -109,16 +98,7 @@ function createArgsAndBody(
     if (!INVALID_TYPES.includes(field.type.kind)) {
       const obj = schema.types.find(t => t.name === field.type.name);
       if (obj) {
-        [result, variables] = createArgsAndBody(
-          schema,
-          field,
-          obj,
-          result,
-          variables,
-          false,
-          depth - 1,
-          variablesJSON
-        );
+        [result, variables] = createArgsAndBody(schema, field, obj, result, variables, false, depth - 1, variablesJSON);
       }
     } else {
       result += `\n\t\t${field.name}`;
@@ -131,11 +111,11 @@ function createArgsAndBody(
     result = originalResult;
     variables = originalVariables;
   } else {
-    result += "\n\t}";
+    result += '\n\t}';
   }
 
   if (root) {
-    result += "\n}";
+    result += '\n}';
   }
   return [result, variables, variablesJSON];
 }
@@ -147,30 +127,26 @@ function generateOperationOutput(schema, list, operationName, config) {
   folder.item = [];
   list.forEach(e => {
     // create a new request for each query/mutation/subscription
-    let request = cloneDeep(sampleRequest);
+    const request = cloneDeep(sampleRequest);
     //
     const entity = recursivelyHandleOfType(e);
     if (!INVALID_TYPES.includes(entity.type.kind)) {
       const entityObj = schema.types.find(t => t.name === entity.type.name);
-      shell.exec(
-        `mkdir -p output/${config.strippedEndpoint}/${operationName}/${
-          entity.name
-        }`
-      );
+      shell.exec(`mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`);
       let [result, variables, variablesJSON] = createArgsAndBody(
         schema,
         entity,
         entityObj,
-        "",
-        "",
+        '',
+        '',
         true,
         config.maxDepth
       );
       result = `${operationName} ${result}`;
-      result = result.replace("()", `(${variables})`);
-      result = prettier.format(result, { parser: "graphql" });
+      result = result.replace('()', `(${variables})`);
+      result = prettier.format(result, { parser: 'graphql' });
       const v = prettier.format(JSON.stringify(variablesJSON), {
-        parser: "json-stringify"
+        parser: 'json-stringify'
       });
       request.request.body.graphql.query = result;
       request.request.body.graphql.variables = v;
@@ -178,18 +154,14 @@ function generateOperationOutput(schema, list, operationName, config) {
       request.request.url.host = [config.endpoint];
       request.name = `${operationName} ${entity.name}`;
       fs.writeFileSync(
-        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${
-          entity.type.name
-        }.graphql`,
+        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
         result,
-        { encoding: "utf-8" }
+        { encoding: 'utf-8' }
       );
       fs.writeFileSync(
-        `output/${config.strippedEndpoint}/${operationName}/${
-          entity.name
-        }/variables.json`,
+        `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
         JSON.stringify(variablesJSON),
-        { encoding: "utf-8" }
+        { encoding: 'utf-8' }
       );
       folder.item.push(request);
     }
@@ -198,7 +170,7 @@ function generateOperationOutput(schema, list, operationName, config) {
 }
 
 export const generateOutput = config => {
-  config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, "");
+  config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, '');
 
   // create collection
   const collection = {};
@@ -207,48 +179,38 @@ export const generateOutput = config => {
   collection.info.name = config.strippedEndpoint;
   collection.item = [];
 
-  // delete old schema
-  shell.exec(`rm schema.json`);
-  let headerCli = "";
+  let headerCli = '';
   // add headers if any
   if (config.header) {
-    config.header.split(",").forEach(h => {
-      const [key, value] = h.split(":");
+    config.header.split(',').forEach(h => {
+      const [key, value] = h.split(':');
       headerCli += ` -h ${key}=${value}`;
     });
   }
   // get graphql schema
-  shell.exec(
-    `npx get-graphql-schema ${config.endpoint} ${headerCli} -j > schema.json`
-  );
+  shell.exec(`npx get-graphql-schema ${config.endpoint} ${headerCli} -j > schema.json`);
 
   // read the schema.json
-  const fileData = fs.readFileSync("schema.json", { encoding: "utf-8" });
+  const fileData = fs.readFileSync('schema.json', { encoding: 'utf-8' });
 
   // parse the schema
-  const schema = JSON.parse(fileData)["__schema"];
+  const schema = JSON.parse(fileData).__schema;
 
   // delete old output if any
   shell.exec(`rm -rf output/${config.strippedEndpoint}`);
 
   // get all queries
-  const queries = schema.types.find(t => t.name === "Query").fields;
+  const queries = schema.types.find(t => t.name === 'Query').fields;
   // get all mutations
-  const mutations = schema.types.find(t => t.name === "Mutation").fields;
+  const mutations = schema.types.find(t => t.name === 'Mutation').fields;
 
   // generate requests for all queries
-  collection.item.push(
-    generateOperationOutput(schema, queries, "query", config)
-  );
+  collection.item.push(generateOperationOutput(schema, queries, 'query', config));
   // generate requests for all mutations
-  collection.item.push(
-    generateOperationOutput(schema, mutations, "mutation", config)
-  );
+  collection.item.push(generateOperationOutput(schema, mutations, 'mutation', config));
 
   // write the newly created collection to the output folder
-  fs.writeFileSync(
-    `output/${config.strippedEndpoint}/collections.json`,
-    JSON.stringify(collection),
-    { encoding: "utf-8" }
-  );
+  fs.writeFileSync(`output/${config.strippedEndpoint}/collections.json`, JSON.stringify(collection), {
+    encoding: 'utf-8'
+  });
 };
