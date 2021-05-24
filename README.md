@@ -15,7 +15,11 @@ npm install -g graphql-testkit
 yarn global add graphql-testkit
 ```
 
-## How to use
+## Working Demo
+
+![Demo](./assets/demo.gif)
+
+## Usage
 
 ```
 graphql-testkit \ 
