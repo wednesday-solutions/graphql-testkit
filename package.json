@@ -3,6 +3,15 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "bin/graphql-testkit",
+  "keywords": [
+    "graphql",
+    "test",
+    "javascript",
+    "cli",
+    "tooling",
+    "test",
+    "testkit"
+  ],
   "scripts": {
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore",
