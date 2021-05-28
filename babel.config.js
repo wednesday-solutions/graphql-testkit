@@ -1,33 +1,29 @@
 module.exports = {
   presets: [
     [
-      "@babel/preset-env",
+      '@babel/preset-env',
       {
         modules: false
       }
     ],
-    "@babel/preset-react"
+    '@babel/preset-react'
   ],
   plugins: [
-    ["@babel/plugin-transform-runtime",
+    [
+      '@babel/plugin-transform-runtime',
       {
-        "regenerator": true
+        regenerator: true
       }
     ],
-    "@babel/plugin-syntax-dynamic-import"],
+    '@babel/plugin-syntax-dynamic-import'
+  ],
   env: {
     production: {
-      only: ["app"],
-      plugins: [
-        "@babel/plugin-transform-react-inline-elements",
-        "@babel/plugin-transform-react-constant-elements"
-      ]
+      only: ['app'],
+      plugins: ['@babel/plugin-transform-react-inline-elements', '@babel/plugin-transform-react-constant-elements']
     },
     test: {
-      plugins: [
-        "@babel/plugin-transform-modules-commonjs",
-        "dynamic-import-node"
-      ]
+      plugins: ['@babel/plugin-transform-modules-commonjs', 'dynamic-import-node']
     }
   }
 };

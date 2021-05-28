@@ -34,7 +34,16 @@ const stackDeepestArg = (arg, arr = []) => {
   return arr;
 };
 
-async function createArgsAndBody(schema, entity, entityObj, result, variables, root, depth, variablesJSON = {}) {
+async function createArgsAndBody(
+  schema,
+  entity,
+  entityObj,
+  root,
+  depth,
+  variablesJSON = {},
+  result = '',
+  variables = ''
+) {
   // if there are no fields inside if it due to depth limits we do not add it to the result, so hold the last values
   const originalResult = result;
   const originalVariables = variables;
@@ -104,11 +113,11 @@ async function createArgsAndBody(schema, entity, entityObj, result, variables, r
             schema,
             field,
             obj,
-            result,
-            variables,
             false,
             depth - 1,
-            variablesJSON
+            variablesJSON,
+            result,
+            variables
           );
         }
       } else {
@@ -149,8 +158,6 @@ async function generateOperationOutput(schema, list, operationName, config) {
           schema,
           entity,
           entityObj,
-          '',
-          '',
           true,
           config.maxDepth
         );
@@ -230,10 +237,6 @@ export const generateOutput = async config => {
       resolve();
     });
   });
-  spinner.stop();
-  spinner.text = 'Generating Postman collection';
-
-  spinner.start();
   // read the schema.json
   const fileData = await new Promise(resolve =>
     fs.readFile('schema.json', { encoding: 'utf-8' }, (_, fileData) => resolve(fileData))
@@ -252,6 +255,10 @@ export const generateOutput = async config => {
   const mutations = schema.types.find(t => t.name === 'Mutation').fields;
 
   const createCollection = async () => {
+    spinner.stop();
+    spinner.text = 'Generating Postman collection';
+
+    spinner.start();
     await new Promise(resolve => {
       generateOperationOutput(schema, queries, 'query', config)
         .then(o => {

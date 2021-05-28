@@ -6,12 +6,12 @@ const commandLineArgs = process.argv.slice(2);
 
 if (!commandLineArgs[0]) {
   shell.exec(
-    `echo Sorry! graphql-testkit requires an argument to be passed. Run graphql-testkit --help for more details`
+    `echo The graphql-testkit requires an argument to be passed.\nRun graphql-testkit --help for more details`
   );
 } else {
   if (commandLineArgs[0] === '--help') {
     shell.echo(
-      'endpoint=GraphQL endpoint you want to create the postman collection for\n' +
+      '\n\nendpoint=GraphQL endpoint you want to create the postman collection for\n' +
         'headers=Comma separated list of headers that you want to pass with the request to get the schema\n' +
         'maxDepth=Maximum amount of nesting you want in the auto-generated queries and mutations\n' +
         ''
