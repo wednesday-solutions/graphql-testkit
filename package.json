@@ -12,6 +12,12 @@
     "test",
     "testkit"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wednesday-solutions/graphql-testkit.git"
+  },
+  "author": "Mac",
+  "homepage": "https://github.com/wednesday-solutions/graphql-testkit",
   "scripts": {
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore",
