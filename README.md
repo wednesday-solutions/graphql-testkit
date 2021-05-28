@@ -1,5 +1,4 @@
-<img align="left" src="https://github.com/wednesday-solutions/graphql-testkit/blob/master/assets/logo.svg" width="480" height="440" />
-
+<img align="left" src="logo.svg" width="480" height="440" />
 <div>
   <a href="https://www.wednesday.is?utm_source=gthb&utm_medium=repo&utm_campaign=serverless" align="left" style="margin-left: 0;">
     <img src="https://uploads-ssl.webflow.com/5ee36ce1473112550f1e1739/5f5879492fafecdb3e5b0e75_wednesday_logo.svg">
