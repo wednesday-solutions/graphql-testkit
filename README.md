@@ -53,7 +53,7 @@ yarn global add graphql-testkit
 
 ## Working Demo
 
-![Demo](./assets/demo.gif)
+![Demo](demo.gif)
 
 ## Usage
 
