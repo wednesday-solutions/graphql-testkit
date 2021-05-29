@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
+  mode: "production",
   target: 'node',
   devtool: 'source-map',
   node: false,
