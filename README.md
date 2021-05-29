@@ -2,7 +2,7 @@
 
 > A utility tool that generates a postman collection with all the mutations and queries that your GraphQL endpoint exposes.
 
-![](logo.svg)
+![](logo.svg?raw=true)
 
 
 ## Install
@@ -17,7 +17,7 @@ yarn global add graphql-testkit
 
 ## Working Demo
 
-![](demo.gif)
+![](demo.gif?raw=true)
 
 ## Usage
 
