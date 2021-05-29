@@ -22,6 +22,17 @@ jobs:
         run: yarn
         env:
           CI: true
+      - name: Build
+        run: yarn wepack:prod && yarn pack
+        env:
+          CI: true
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Gitflow
+          author_email: git@wednesday.is
+          message: 'Created bin'
+          add: 'bin/'
       - name: Bump version
         run: |
           git config --global user.email "git@wednesday.is"
@@ -32,10 +43,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-      - name: Build
-        run: yarn pack
-        env:
-          CI: true
       - name: Publish
         run: yarn publish
         env:
