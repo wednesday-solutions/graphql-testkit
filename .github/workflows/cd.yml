@@ -23,7 +23,7 @@ jobs:
         env:
           CI: true
       - name: Build
-        run: yarn wepack:prod && yarn pack
+        run: yarn webpack:prod && yarn pack
         env:
           CI: true
       - name: Commit changes
