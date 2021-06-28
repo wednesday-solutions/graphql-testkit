@@ -17,7 +17,8 @@ if (!commandLineArgs[0]) {
   } else {
     const config = createConfig(
       {
-        maxDepth: 4
+        maxDepth: 4,
+        header: ''
       },
       commandLineArgs
     );

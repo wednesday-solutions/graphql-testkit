@@ -87,7 +87,7 @@ async function createArgsAndBody(
       }
     });
     // concatenate all variables in a separate variable so that they can all be added after complete processing.
-    if (!variablesJSON[`${entity.name + ucfirst(arg.name)}`]) {
+    if (!{}.hasOwnProperty.call(variablesJSON, `${entity.name + ucfirst(arg.name)}`)) {
       variables += `${index ? ', ' : ''}$${entity.name + ucfirst(arg.name)}:${name}`;
       variablesJSON[`${entity.name + ucfirst(arg.name)}`] = null;
     }
