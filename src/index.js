@@ -87,8 +87,11 @@ async function createArgsAndBody(
       }
     });
     // concatenate all variables in a separate variable so that they can all be added after complete processing.
-    variables += `${index ? ', ' : ''}$${entity.name + ucfirst(arg.name)}:${name}`;
-    variablesJSON[`${entity.name + ucfirst(arg.name)}`] = null;
+    if (!variablesJSON[`${entity.name + ucfirst(arg.name)}`]) {
+      variables += `${index ? ', ' : ''}$${entity.name + ucfirst(arg.name)}:${name}`;
+      variablesJSON[`${entity.name + ucfirst(arg.name)}`] = null;
+    }
+
     result += `${index ? ', ' : ''}${arg.name}:$${entity.name + ucfirst(arg.name)}`;
   });
 
