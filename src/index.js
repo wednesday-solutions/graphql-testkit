@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { v4 } from 'uuid';
-import { capitalize, cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 import baseCollection from './base-collection.json';
 import sampleFolder from './base-folder.json';
 import sampleRequest from './base-request.json';
@@ -53,7 +53,7 @@ async function createArgsAndBody(
   if (root) {
     // add the name of the operation and variables only for the root iteration.
     // so that we have something like this `query Users()`
-    result += `${capitalize(entity.name)}`;
+    result += `${ucfirst(entity.name)}`;
     if (entity.args?.length) {
       result += `()`;
     }
