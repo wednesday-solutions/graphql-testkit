@@ -6,8 +6,7 @@ import sampleFolder from './base-folder.json';
 import sampleRequest from './base-request.json';
 import prettier from 'prettier';
 import Ora from 'ora';
-
-const shell = require('shelljs');
+import shell from 'shelljs';
 
 const INVALID_TYPES = ['SCALAR', 'ENUM', 'UNION'];
 
@@ -44,7 +43,6 @@ async function createArgsAndBody(
   result = '',
   variables = ''
 ) {
-  // if there are no fields inside if it due to depth limits we do not add it to the result, so hold the last values
   const originalResult = result;
   const originalVariables = variables;
   if (depth < 1) {
@@ -66,7 +64,7 @@ async function createArgsAndBody(
     result += `(`;
   }
 
-  // for each argument that an entity, even a nested entity accepts, we should have a variable.
+  // for each argument that an entity has, even a nested entity, we could have a variable.
   entity.args.forEach((arg, index) => {
     // so basically for cases where the argument is NON_NULL/LIST, there is nesting in
     // the arguments and the name will be present only in the deepest arg.
