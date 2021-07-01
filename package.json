@@ -1,6 +1,6 @@
 {
   "name": "graphql-testkit",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "license": "MIT",
   "main": "bin/graphql-testkit",
   "keywords": [
