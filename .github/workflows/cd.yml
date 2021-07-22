@@ -20,6 +20,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: yarn
+      - name: Build
+        run: yarn webpack:prod && yarn pack
       - name: Bump version
         run: |
           git config --global user.email "git@wednesday.is"
