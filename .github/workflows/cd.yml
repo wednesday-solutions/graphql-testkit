@@ -20,12 +20,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: yarn
-        env:
-          CI: true
       - name: Build
         run: yarn webpack:prod && yarn pack
-        env:
-          CI: true
       - name: Bump version
         run: |
           git config --global user.email "git@wednesday.is"
@@ -36,7 +32,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
       - name: Publish
-        run: yarn publish
+        run: yarn publish graphql-testkit-1.0.${{ steps.package-version.outputs.current-version }}.tgz
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
