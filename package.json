@@ -28,6 +28,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prettify": "prettier --write",
     "webpack:prod": "webpack -p --mode=production --progress",
+    "prepublishOnly": "yarn webpack:prod",
     "local": "webpack -p --mode=development && node bin/graphql-testkit"
   },
   "dependencies": {
