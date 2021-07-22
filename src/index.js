@@ -6,6 +6,7 @@ import sampleFolder from './base-folder.json';
 import sampleRequest from './base-request.json';
 import prettier from 'prettier';
 import Ora from 'ora';
+import Promise from 'bluebird';
 import shell from 'shelljs';
 
 const INVALID_TYPES = ['SCALAR', 'ENUM', 'UNION'];
@@ -101,31 +102,29 @@ async function createArgsAndBody(
   // since its not ENUM/UNION/SCALAR it must have fields
   result += '{';
   const tempResult = result;
-  await Promise.all(
-    (entityObj?.fields || []).map(async field => {
-      if (field.isDeprecated) {
-        return;
+  await Promise.mapSeries(entityObj?.fields || [], async field => {
+    if (field.isDeprecated) {
+      return;
+    }
+    field = recursivelyHandleOfType(field);
+    if (!INVALID_TYPES.includes(field.type.kind)) {
+      const obj = schema.types.find(t => t.name === field.type.name);
+      if (obj) {
+        [result, variables] = await createArgsAndBody(
+          schema,
+          field,
+          obj,
+          false,
+          depth - 1,
+          variablesJSON,
+          result,
+          variables
+        );
       }
-      field = recursivelyHandleOfType(field);
-      if (!INVALID_TYPES.includes(field.type.kind)) {
-        const obj = schema.types.find(t => t.name === field.type.name);
-        if (obj) {
-          [result, variables] = await createArgsAndBody(
-            schema,
-            field,
-            obj,
-            false,
-            depth - 1,
-            variablesJSON,
-            result,
-            variables
-          );
-        }
-      } else {
-        result += `\n\t\t${field.name}`;
-      }
-    })
-  );
+    } else {
+      result += `\n\t\t${field.name}`;
+    }
+  });
   // if the tempResult is the same as the result it means that no fields were added
   // so revert to original - this will remove all the arguments and variables
   // that we added since they are no longer needed
@@ -147,67 +146,65 @@ async function generateOperationOutput(schema, list, operationName, config) {
   const folder = cloneDeep(sampleFolder);
   folder.name = operationName;
   folder.item = [];
-  await Promise.all(
-    list.map(async e => {
-      // create a new request for each query/mutation/subscription
-      const request = cloneDeep(sampleRequest);
-      const entity = recursivelyHandleOfType(e);
-      if (!INVALID_TYPES.includes(entity.type.kind)) {
-        const entityObj = schema.types.find(t => t.name === entity.type.name);
-        shell.exec(`mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`);
-        let [result, variables, variablesJSON] = await createArgsAndBody(
-          schema,
-          entity,
-          entityObj,
-          true,
-          config.maxDepth
+  await Promise.mapSeries(list, async e => {
+    // create a new request for each query/mutation/subscription
+    const request = cloneDeep(sampleRequest);
+    const entity = recursivelyHandleOfType(e);
+    if (!INVALID_TYPES.includes(entity.type.kind)) {
+      const entityObj = schema.types.find(t => t.name === entity.type.name);
+      shell.exec(`mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`);
+      let [result, variables, variablesJSON] = await createArgsAndBody(
+        schema,
+        entity,
+        entityObj,
+        true,
+        config.maxDepth
+      );
+      result = `${operationName} ${result}`;
+      result = result.replace('()', `(${variables})`);
+      result = prettier.format(result, { parser: 'graphql' });
+      const v = prettier.format(JSON.stringify(variablesJSON), {
+        parser: 'json-stringify'
+      });
+      request.request.body.graphql.query = result;
+
+      request.request.header = config.header.split(',').map(header => {
+        const [key, value] = header.split(':');
+        return {
+          key,
+          value,
+          type: 'text',
+          disabled: false
+        };
+      });
+      request.request.body.graphql.variables = v;
+      request.request.url.raw = config.endpoint;
+      request.request.url.host = [config.endpoint];
+      request.name = `${operationName} ${entity.name}`;
+      await new Promise(resolve => {
+        fs.writeFile(
+          `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
+          result,
+
+          { encoding: 'utf-8' },
+          () => {
+            resolve();
+          }
         );
-        result = `${operationName} ${result}`;
-        result = result.replace('()', `(${variables})`);
-        result = prettier.format(result, { parser: 'graphql' });
-        const v = prettier.format(JSON.stringify(variablesJSON), {
-          parser: 'json-stringify'
-        });
-        request.request.body.graphql.query = result;
-
-        request.request.header = config.header.split(',').map(header => {
-          const [key, value] = header.split(':');
-          return {
-            key,
-            value,
-            type: 'text',
-            disabled: false
-          };
-        });
-        request.request.body.graphql.variables = v;
-        request.request.url.raw = config.endpoint;
-        request.request.url.host = [config.endpoint];
-        request.name = `${operationName} ${entity.name}`;
-        await new Promise(resolve => {
-          fs.writeFile(
-            `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
-            result,
-
-            { encoding: 'utf-8' },
-            () => {
-              resolve();
-            }
-          );
-        });
-        await new Promise(resolve => {
-          fs.writeFile(
-            `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
-            JSON.stringify(variablesJSON),
-            { encoding: 'utf-8' },
-            () => {
-              resolve();
-            }
-          );
-        });
-        folder.item.push(request);
-      }
-    })
-  );
+      });
+      await new Promise(resolve => {
+        fs.writeFile(
+          `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
+          JSON.stringify(variablesJSON),
+          { encoding: 'utf-8' },
+          () => {
+            resolve();
+          }
+        );
+      });
+      folder.item.push(request);
+    }
+  });
   return folder;
 }
 

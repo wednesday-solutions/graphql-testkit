@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "aws-cognito-cli": "^1.0.9",
+    "bluebird": "^3.7.2",
     "cli-spinner": "^0.2.10",
     "fs": "^0.0.1-security",
     "get-graphql-schema": "^2.1.2",
