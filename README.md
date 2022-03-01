@@ -23,7 +23,7 @@ yarn global add graphql-testkit
 
 ```
 graphql-testkit \ 
---endpoint=https://api/spacex.land/graphql\ 
+--endpoint=https://api.spacex.land/graphql\ 
 --header="Authorization:123,x-ws-system-id=10" \
 --maxDepth=4
 ```
