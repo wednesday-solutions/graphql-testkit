@@ -37,8 +37,11 @@ graphql-testkit \
 - ### maxDepth (optional)
     The maximum you want to nest the generated queries and mutations. Default value is 4
 
+- ### outputDirectory (optional)
+    The directory where the output is saved. Default value is "./output"
+
 ## Output
-An output directory is created in the current working directory.  
+An output directory is created in the `outputDirectory` directory.
 A folder structure based on endpoint will be created, which will contain the Postman collection(collections.json)
 
 
@@ -48,7 +51,7 @@ endpoint=https://api.spacex.land/graphql
 
 <b>Output Directory</b>
 ```
-output/api.spacex.land/graphql/collections.json
+${outputDirectory}/api.spacex.land/graphql/collections.json
 ```
 
 ## License

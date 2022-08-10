@@ -18,7 +18,8 @@ if (!commandLineArgs[0]) {
     const config = createConfig(
       {
         maxDepth: 4,
-        header: ''
+        header: '',
+        outputDirectory: `${process.cwd()}/output`
       },
       commandLineArgs
     );
