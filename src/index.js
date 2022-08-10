@@ -152,7 +152,7 @@ async function generateOperationOutput(schema, list, operationName, config) {
     const entity = recursivelyHandleOfType(e);
     if (!INVALID_TYPES.includes(entity.type.kind)) {
       const entityObj = schema.types.find(t => t.name === entity.type.name);
-      shell.exec(`mkdir -p output/${config.strippedEndpoint}/${operationName}/${entity.name}`);
+      shell.exec(`mkdir -p ${config.outputDirectory}/${config.strippedEndpoint}/${operationName}/${entity.name}`);
       let [result, variables, variablesJSON] = await createArgsAndBody(
         schema,
         entity,
@@ -183,7 +183,9 @@ async function generateOperationOutput(schema, list, operationName, config) {
       request.name = `${operationName} ${entity.name}`;
       await new Promise(resolve => {
         fs.writeFile(
-          `output/${config.strippedEndpoint}/${operationName}/${entity.name}/${entity.type.name}.graphql`,
+          `${config.outputDirectory}/${config.strippedEndpoint}/${operationName}/${entity.name}/${
+            entity.type.name
+          }.graphql`,
           result,
 
           { encoding: 'utf-8' },
@@ -194,7 +196,7 @@ async function generateOperationOutput(schema, list, operationName, config) {
       });
       await new Promise(resolve => {
         fs.writeFile(
-          `output/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
+          `${config.outputDirectory}/${config.strippedEndpoint}/${operationName}/${entity.name}/variables.json`,
           JSON.stringify(variablesJSON),
           { encoding: 'utf-8' },
           () => {
@@ -244,7 +246,7 @@ export const generateOutput = async config => {
 
   // delete old output if any
   await new Promise(resolve =>
-    shell.exec(`rm -rf output/${config.strippedEndpoint}`, { async: true }, () => resolve())
+    shell.exec(`rm -rf ${config.outputDirectory}/${config.strippedEndpoint}`, { async: true }, () => resolve())
   );
 
   // get all queries
@@ -273,7 +275,7 @@ export const generateOutput = async config => {
   // write the newly created collection to the output folder
   await new Promise(resolve =>
     fs.writeFile(
-      `output/${config.strippedEndpoint}/collections.json`,
+      `${config.outputDirectory}/${config.strippedEndpoint}/collections.json`,
       JSON.stringify(collection),
       {
         encoding: 'utf-8'
@@ -284,5 +286,5 @@ export const generateOutput = async config => {
     )
   );
   spinner.succeed('Postman collection generated');
-  spinner.succeed(`Output written to: ${process.cwd()}/output/${config.strippedEndpoint}`);
+  spinner.succeed(`Output written to: ${config.outputDirectory}/${config.strippedEndpoint}`);
 };
