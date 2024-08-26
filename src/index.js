@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { v4 } from 'uuid';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import baseCollection from './base-collection.json';
 import sampleFolder from './base-folder.json';
 import sampleRequest from './base-request.json';
@@ -142,6 +142,10 @@ async function createArgsAndBody(
 }
 
 async function generateOperationOutput(schema, list, operationName, config) {
+  if (isEmpty(list)) {
+    // there are no operations of type ${operationName}
+    return;
+  }
   // create a new folder for queries/mutations/subscriptions
   const folder = cloneDeep(sampleFolder);
   folder.name = operationName;
@@ -209,7 +213,7 @@ async function generateOperationOutput(schema, list, operationName, config) {
 }
 
 export const generateOutput = async config => {
-  config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, '');
+  config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, '').replaceAll('.', '_');
 
   // create collection
   const collection = {};
@@ -248,9 +252,9 @@ export const generateOutput = async config => {
   );
 
   // get all queries
-  const queries = schema.types.find(t => t.name === 'Query').fields;
+  const queries = schema.types.find(t => t.name === 'Query')?.fields;
   // get all mutations
-  const mutations = schema.types.find(t => t.name === 'Mutation').fields;
+  const mutations = schema.types.find(t => t.name === 'Mutation')?.fields;
 
   const createCollection = async () => {
     spinner.stop();

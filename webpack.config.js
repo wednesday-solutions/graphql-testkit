@@ -57,6 +57,6 @@ module.exports = {
   ],
   resolve: {
     modules: ['node_modules', 'app'],
-    mainFields: ['browser', 'jsnext:main', 'main']
+    mainFields: ['jsnext:main', 'main']
   }
 };
