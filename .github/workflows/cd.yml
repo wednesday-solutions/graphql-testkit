@@ -22,6 +22,16 @@ jobs:
         run: yarn
       - name: Build
         run: yarn webpack:prod && yarn pack
+      - name: Bump version
+        run: |
+          git config --global user.email "git@wednesday.is"
+          git config --global user.name "Git"
+          npm version patch -m 'Bump up'
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
       - name: Publish
         run: yarn publish
         env:
