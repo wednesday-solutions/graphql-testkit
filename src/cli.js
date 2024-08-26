@@ -1,4 +1,5 @@
 import shell from 'shelljs';
+import quote from 'shell-quote/quote';
 import process from 'process';
 import { generateOutput } from './index';
 
@@ -43,7 +44,7 @@ export function createConfig(config, args) {
     if (!k.includes('--')) {
       return shell.echo(`Invalid arg ${key}`);
     }
-    newConfig[key] = value;
+    newConfig[key] = quote(Array.isArray(value) ? value : [value]);
   }
   config = { ...config, ...newConfig };
   return config;

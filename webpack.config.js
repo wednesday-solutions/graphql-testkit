@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
-  mode: "production",
+  mode: 'production',
   target: 'node',
   devtool: 'source-map',
   node: false,
@@ -39,9 +39,7 @@ module.exports = {
     providedExports: true,
     minimizer: [
       new TerserPlugin({
-        cache: true,
         parallel: true,
-        sourceMap: true,
         terserOptions: {
           // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
         }
@@ -49,7 +47,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new CopyPlugin([{ from: './node_modules/shelljs/src/exec-child.js', to: '' }]),
+    new CopyPlugin({
+      patterns: [{ from: './node_modules/shelljs/src/exec-child.js', to: '' }]
+    }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production'
     }),
