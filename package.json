@@ -35,6 +35,7 @@
     "get-graphql-schema": "^2.1.2",
     "lodash": "^4.17.21",
     "ora": "^8.1.0",
+    "shell-quote": "^1.8.1",
     "uuid": "^10.0.0"
   },
   "bin": {
@@ -68,8 +69,8 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^17.10.2",
-    "eslint-plugin-promise": "^7.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.1.0",
     "globals": "^15.9.0",
     "lint-staged": "^15.2.9",
     "pre-commit": "^1.2.2",

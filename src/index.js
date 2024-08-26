@@ -214,7 +214,7 @@ async function generateOperationOutput(schema, list, operationName, config) {
 }
 
 export const generateOutput = async (config) => {
-  config.strippedEndpoint = config.endpoint.replace(/(http|https):\/\//, '').replaceAll('.', '_');
+  config.strippedEndpoint = config.endpoint.replace(/(http|https)\\:\/\//, '').replaceAll('.', '_');
 
   // create collection
   const collection = {};
