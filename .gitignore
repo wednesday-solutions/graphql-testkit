@@ -5,4 +5,4 @@ yarn-error.log
 *.tgz
 output
 schema.json
-bing
+bin
