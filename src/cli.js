@@ -12,6 +12,7 @@ if (!commandLineArgs[0]) {
       '\nendpoint=GraphQL endpoint you want to create the postman collection for\n' +
         'headers=Comma separated list of headers that you want to pass with the request to get the schema\n' +
         'maxDepth=Maximum amount of nesting you want in the auto-generated queries and mutations\n' +
+        'outputDirectory=Output directory to store the schema and collection in\n' +
         ''
     );
   } else {
