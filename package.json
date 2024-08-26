@@ -20,8 +20,8 @@
   "homepage": "https://github.com/wednesday-solutions/graphql-testkit",
   "scripts": {
     "lint": "npm run lint:js",
-    "lint:eslint": "eslint --ignore-path .gitignore",
-    "lint:eslint:fix": "eslint --ignore-path .gitignore --fix src/*.js",
+    "lint:eslint": "eslint",
+    "lint:eslint:fix": "eslint --fix src/*.js",
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged",
     "test:clean": "rimraf ./coverage",
@@ -58,6 +58,7 @@
     "@babel/plugin-transform-runtime": "^7.25.4",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-react": "^7.24.7",
+    "@eslint/compat": "^1.1.1",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.9.1",
     "babel-loader": "^9.1.3",
