@@ -236,7 +236,7 @@ export const generateOutput = async (config) => {
   spinner.start();
   await new Promise((resolve) => {
     shell.exec(`npx get-graphql-schema ${config.endpoint} ${headerCli} -j > schema.json`, { async: true }, () => {
-      spinner.succeed(`Schema fetched from ${config.endpoint}`);
+      spinner.succeed(`Schema fetched from ${config.strippedEndpoint}`);
       resolve();
     });
   });
